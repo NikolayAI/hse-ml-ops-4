@@ -1,0 +1,146 @@
+schema: '2.0'
+stages:
+  train_base:
+    cmd: PYTHONPATH=. python -m src.train --params params.yaml
+    deps:
+    - path: ai-vs-human-generated-dataset-hw/Test_1
+      hash: md5
+      md5: 62c3780e5c19bc53638a42e202acda77.dir
+      size: 229951307
+      nfiles: 3998
+    - path: ai-vs-human-generated-dataset-hw/Train_1
+      hash: md5
+      md5: be4fba47d09ac1e4ff93610c7ce22370.dir
+      size: 577186450
+      nfiles: 9994
+    - path: src/dataset.py
+      hash: md5
+      md5: 27e6860fdd74a7ba08b10c9db6bd969f
+      size: 1137
+    - path: src/s3_utils.py
+      hash: md5
+      md5: 368844867fdd168137349fbbf306074c
+      size: 1228
+    - path: src/train.py
+      hash: md5
+      md5: bb6f3cd2b3af5077544d1197143913a9
+      size: 4677
+    - path: src/training.py
+      hash: md5
+      md5: 65a2aaa3c21a4a52d1be2dbfdda4940d
+      size: 4804
+    params:
+      params.yaml:
+        data.test_1:
+          csv: ai-vs-human-generated-dataset-hw/Test_1/test.csv
+          root: ai-vs-human-generated-dataset-hw/Test_1
+          subdir: test_data
+        data.train_1:
+          csv: ai-vs-human-generated-dataset-hw/Train_1/train.csv
+          root: ai-vs-human-generated-dataset-hw/Train_1
+          subdir: train_data
+        s3:
+          endpoint_url: http://localhost:9000
+          access_key: minioadmin
+          secret_key: minioadmin
+          region: us-east-1
+          bucket: models
+          base_model_key: resnet18_base.pt
+          finetuned_model_key: resnet18_finetuned.pt
+        train_base:
+          image_size: 224
+          batch_size: 64
+          num_epochs: 3
+          lr: 0.001
+          step_size: 2
+          gamma: 0.5
+          num_workers: 4
+          seed: 42
+    outs:
+    - path: checkpoints/resnet18_base.pt
+      hash: md5
+      md5: e1b0986489b77352bd75d1b7995c8016
+      size: 44788427
+    - path: metrics/train_base.json
+      hash: md5
+      md5: 5f2d0642b40c6d84d965cdec855c3329
+      size: 649
+    - path: my_logs/train_base
+      hash: md5
+      md5: a0987469f32d6c0a3fe595d61deb69d3.dir
+      size: 1435
+      nfiles: 1
+  finetune:
+    cmd: PYTHONPATH=. python -m src.finetune --params params.yaml
+    deps:
+    - path: ai-vs-human-generated-dataset-hw/Test_2
+      hash: md5
+      md5: be5492c21e2dec84056e1599a807ccd1.dir
+      size: 114391042
+      nfiles: 2001
+    - path: ai-vs-human-generated-dataset-hw/Train_2
+      hash: md5
+      md5: cd8edb58d893e35241fdf8fbf6049229.dir
+      size: 229344118
+      nfiles: 3998
+    - path: checkpoints/resnet18_base.pt
+      hash: md5
+      md5: e1b0986489b77352bd75d1b7995c8016
+      size: 44788427
+    - path: src/dataset.py
+      hash: md5
+      md5: 27e6860fdd74a7ba08b10c9db6bd969f
+      size: 1137
+    - path: src/finetune.py
+      hash: md5
+      md5: 0f56331fcfec39f7b9aad2491547874f
+      size: 5157
+    - path: src/s3_utils.py
+      hash: md5
+      md5: 368844867fdd168137349fbbf306074c
+      size: 1228
+    - path: src/training.py
+      hash: md5
+      md5: 65a2aaa3c21a4a52d1be2dbfdda4940d
+      size: 4804
+    params:
+      params.yaml:
+        data.test_2:
+          csv: ai-vs-human-generated-dataset-hw/Test_2/test.csv
+          root: ai-vs-human-generated-dataset-hw/Test_2
+          subdir: test_data
+        data.train_2:
+          csv: ai-vs-human-generated-dataset-hw/Train_2/train.csv
+          root: ai-vs-human-generated-dataset-hw/Train_2
+          subdir: train_data
+        finetune:
+          image_size: 224
+          batch_size: 64
+          num_epochs: 2
+          lr: 0.0001
+          step_size: 1
+          gamma: 0.5
+          num_workers: 4
+          seed: 42
+        s3:
+          endpoint_url: http://localhost:9000
+          access_key: minioadmin
+          secret_key: minioadmin
+          region: us-east-1
+          bucket: models
+          base_model_key: resnet18_base.pt
+          finetuned_model_key: resnet18_finetuned.pt
+    outs:
+    - path: checkpoints/resnet18_finetuned.pt
+      hash: md5
+      md5: 5b66b5fc667465bd0cb72872b96a441f
+      size: 44789067
+    - path: metrics/finetune.json
+      hash: md5
+      md5: c270867e2a08a0fa88f899bb9074a6b5
+      size: 672
+    - path: my_logs/finetune
+      hash: md5
+      md5: 9e917df85db649bf7888e127d5829823.dir
+      size: 1176
+      nfiles: 1

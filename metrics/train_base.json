@@ -1,0 +1,30 @@
+{
+  "hparams": {
+    "batch_size": 64,
+    "gamma": 0.5,
+    "image_size": 224,
+    "lr": 0.001,
+    "model": "resnet18",
+    "num_epochs": 3,
+    "pretrained": true,
+    "seed": 42,
+    "stage": "train_base",
+    "step_size": 2,
+    "test_size": 3997,
+    "train_size": 9993
+  },
+  "test": {
+    "accuracy": 0.929697272954716,
+    "f1": 0.933396539464328,
+    "loss": 0.1748600077384527,
+    "precision": 0.887736699729486,
+    "recall": 0.984007996001999
+  },
+  "train": {
+    "accuracy": 0.9396577604323026,
+    "f1": 0.9395488721804511,
+    "loss": 0.15163102117038568,
+    "precision": 0.9417202572347267,
+    "recall": 0.9373874774954991
+  }
+}
