@@ -1,0 +1,52 @@
+data:
+  root: ai-vs-human-generated-dataset-hw
+  train_1:
+    csv: ai-vs-human-generated-dataset-hw/Train_1/train.csv
+    root: ai-vs-human-generated-dataset-hw/Train_1
+    subdir: train_data
+  test_1:
+    csv: ai-vs-human-generated-dataset-hw/Test_1/test.csv
+    root: ai-vs-human-generated-dataset-hw/Test_1
+    subdir: test_data
+  train_2:
+    csv: ai-vs-human-generated-dataset-hw/Train_2/train.csv
+    root: ai-vs-human-generated-dataset-hw/Train_2
+    subdir: train_data
+  test_2:
+    csv: ai-vs-human-generated-dataset-hw/Test_2/test.csv
+    root: ai-vs-human-generated-dataset-hw/Test_2
+    subdir: test_data
+
+train_base:
+  image_size: 224
+  batch_size: 64
+  num_epochs: 3
+  lr: 0.001
+  step_size: 2
+  gamma: 0.5
+  num_workers: 4
+  seed: 42
+
+finetune:
+  image_size: 224
+  batch_size: 64
+  num_epochs: 2
+  lr: 0.0001
+  step_size: 1
+  gamma: 0.5
+  num_workers: 4
+  seed: 42
+
+s3:
+  endpoint_url: http://localhost:9000
+  access_key: minioadmin
+  secret_key: minioadmin
+  region: us-east-1
+  bucket: models
+  base_model_key: resnet18_base.pt
+  finetuned_model_key: resnet18_finetuned.pt
+
+paths:
+  tensorboard_dir: my_logs
+  checkpoints_dir: checkpoints
+  metrics_dir: metrics

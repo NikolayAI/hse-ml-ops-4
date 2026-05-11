@@ -1,0 +1,47 @@
+stages:
+  train_base:
+    cmd: PYTHONPATH=. python -m src.train --params params.yaml
+    deps:
+      - src/train.py
+      - src/training.py
+      - src/dataset.py
+      - src/s3_utils.py
+      - ai-vs-human-generated-dataset-hw/Train_1
+      - ai-vs-human-generated-dataset-hw/Test_1
+    params:
+      - data.train_1
+      - data.test_1
+      - train_base
+      - s3
+    outs:
+      - checkpoints/resnet18_base.pt:
+          cache: false
+      - my_logs/train_base:
+          cache: false
+    metrics:
+      - metrics/train_base.json:
+          cache: false
+
+  finetune:
+    cmd: PYTHONPATH=. python -m src.finetune --params params.yaml
+    deps:
+      - src/finetune.py
+      - src/training.py
+      - src/dataset.py
+      - src/s3_utils.py
+      - ai-vs-human-generated-dataset-hw/Train_2
+      - ai-vs-human-generated-dataset-hw/Test_2
+      - checkpoints/resnet18_base.pt
+    params:
+      - data.train_2
+      - data.test_2
+      - finetune
+      - s3
+    outs:
+      - checkpoints/resnet18_finetuned.pt:
+          cache: false
+      - my_logs/finetune:
+          cache: false
+    metrics:
+      - metrics/finetune.json:
+          cache: false
